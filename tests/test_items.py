@@ -1019,3 +1019,43 @@ def test_removal_of_arrayitem_with_extra_whitespace():
     docstr = doc.as_string()
     parse(docstr)
     assert docstr == expected
+
+
+def test_badly_formatted_array_and_item_removal():
+    # fmt: off
+    expected = """
+x = [
+    '0'#a
+,#b
+
+    # comment
+'1' #c
+    , #d
+# another comment
+'2'
+ # yet another comment
+,'3', # f
+ # comments here
+'4'#g
+#    comments there
+ ,'5' #h
+    #   comments everywhere
+ # so many comments
+,'6' ,
+      # you get a comment
+# you get a comment
+   '7' ,#j
+# everybody gets a comment!!!
+ "8"#c
+,"9",  
+  "10"
+]
+"""
+    # fmt: on
+    assert expected == parse(expected).as_string()
+    for i in range(11):
+        doc = parse(expected)
+        x = doc["x"]
+        assert isinstance(x, Array)
+        x.remove(str(i))
+        parse(doc.as_string())
