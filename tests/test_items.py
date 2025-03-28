@@ -1047,7 +1047,7 @@ x = [
    '7' ,#j
 # everybody gets a comment!!!
  "8"#c
-,"9",  
+,"9",
   "10"
 ]
 """
